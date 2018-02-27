@@ -1,11 +1,13 @@
 package br.com.beveragesuggester.boundary;
 
+import br.com.beveragesuggester.control.TemperatureService;
 import br.com.beveragesuggester.entity.Beverage;
 import br.com.beveragesuggester.entity.Category;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 /**
  *
@@ -21,8 +23,12 @@ public class BeverageService {
             new Beverage("Smoothie", Arrays.asList(Category.COLD, Category.ANYTIME)),
             new Beverage("Tea", Arrays.asList(Category.HOT)));
     
+    @Inject
+    private TemperatureService temperatureService;
+    
     public Beverage pickRandom() {
         int randomIndex = new Random().nextInt(BEVERAGES.size());
+        temperatureService.getTemperature("London");
         return BEVERAGES.get(randomIndex);
     }
 }
