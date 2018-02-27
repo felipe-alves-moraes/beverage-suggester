@@ -14,7 +14,7 @@ import javax.ws.rs.client.ClientBuilder;
  */
 public class TemperatureService {
 
-    public String getTemperature(String city) {
+    public Double getTemperature(String city) {
         Client client = ClientBuilder.newBuilder()
                 .connectTimeout(500, TimeUnit.MICROSECONDS)
                 .readTimeout(700, TimeUnit.MICROSECONDS)
@@ -27,10 +27,9 @@ public class TemperatureService {
                     .request().get(JsonObject.class);
             
             JsonPointer temperature = Json.createPointer("/main/temp");
-            System.out.println(temperature.getValue(temperatureDTO));
-            return temperatureDTO.getString("name");
+            return Double.valueOf(temperature.getValue(temperatureDTO).toString());
         } catch (ProcessingException pe) {
-            return "";
+            return 0.0;
         }
     }
 }
