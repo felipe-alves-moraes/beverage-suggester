@@ -27,7 +27,7 @@ public class TemperatureService {
         
         this.target = client.target("http://api.openweathermap.org/data/2.5/weather");
     }
-    public String getTemperature(String city) {
+    public Double getTemperature(String city) {
         
         try {
             JsonObject temperatureDTO = target
@@ -37,10 +37,9 @@ public class TemperatureService {
                     .request().get(JsonObject.class);
             
             JsonPointer temperature = Json.createPointer("/main/temp");
-            System.out.println(temperature.getValue(temperatureDTO));
-            return temperatureDTO.getString("name");
+            return Double.valueOf(temperature.getValue(temperatureDTO).toString());
         } catch (ProcessingException pe) {
-            return "";
+            return 0.0;
         }
     }
 }

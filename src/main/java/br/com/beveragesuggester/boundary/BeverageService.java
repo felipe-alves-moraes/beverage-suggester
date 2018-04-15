@@ -6,6 +6,7 @@ import br.com.beveragesuggester.entity.Category;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import static java.util.stream.Collectors.toList;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -28,7 +29,27 @@ public class BeverageService {
     
     public Beverage pickRandom() {
         int randomIndex = new Random().nextInt(BEVERAGES.size());
-        temperatureService.getTemperature("London");
+        
         return BEVERAGES.get(randomIndex);
+    }
+    
+    public Beverage pickRandomBasedOnTemperature() {
+        Double temperature = temperatureService.getTemperature("Sao Paulo, BR");
+        List<Beverage> beveragesTempBased = BEVERAGES.stream()
+                .filter(beverage -> beverage.getCategories().contains(getBestCategoryFromTemperature(temperature.intValue())))
+                .collect(toList());
+        
+        int randomIndex = new Random().nextInt(beveragesTempBased.size());
+        return beveragesTempBased.get(randomIndex);
+    }
+    
+    private Category getBestCategoryFromTemperature(int temperature) {
+        if (temperature <= 20) {
+            return Category.HOT;
+        } else if (temperature > 20 && temperature < 27) {
+            return Category.ANYTIME;
+        } else {
+            return Category.COLD;
+        }
     }
 }
