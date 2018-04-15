@@ -35,8 +35,10 @@ public class BeverageService {
     
     public Beverage pickRandomBasedOnTemperature() {
         Double temperature = temperatureService.getTemperature("Sao Paulo, BR");
+        Category bestCategoryFromTemperature = getBestCategoryFromTemperature(temperature.intValue());
+        
         List<Beverage> beveragesTempBased = BEVERAGES.stream()
-                .filter(beverage -> beverage.getCategories().contains(getBestCategoryFromTemperature(temperature.intValue())))
+                .filter(beverage -> beverage.getCategories().contains(bestCategoryFromTemperature))
                 .collect(toList());
         
         int randomIndex = new Random().nextInt(beveragesTempBased.size());
