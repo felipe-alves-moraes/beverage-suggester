@@ -4,7 +4,6 @@ import br.com.beveragesuggester.entity.Beverage;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 
 /**
  *
@@ -17,12 +16,7 @@ public class BeverageResource {
     private BeverageService beverageService;
 
     @GET
-    public Beverage random(
-            @QueryParam("useTemperature") boolean useTemperature) {
-        if (useTemperature) {
-            return beverageService.pickRandomBasedOnTemperature();
-        } else {
-            return beverageService.pickRandom();
-        }
+    public Beverage random() {
+        return beverageService.pickRandom();
     }
 }
