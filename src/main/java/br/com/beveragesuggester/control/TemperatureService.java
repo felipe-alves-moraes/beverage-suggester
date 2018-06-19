@@ -38,7 +38,7 @@ public class TemperatureService {
             JsonObject temperatureDTO = target
                     .queryParam("q", city)
                     .queryParam("units", "metric")
-                    .queryParam("APPID", "38d971ae945af9269aafe5e7352e56d5")
+                    .queryParam("APPID", "<YOUR_APPID_KEY_HERE>")
                     .request().get(JsonObject.class);
 
             JsonPointer temperature = Json.createPointer("/main/temp");
