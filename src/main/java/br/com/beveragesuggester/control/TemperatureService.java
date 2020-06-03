@@ -1,15 +1,12 @@
 package br.com.beveragesuggester.control;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CompletionStage;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.json.Json;
-import javax.json.JsonObject;
 import javax.json.JsonPointer;
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 /**
  *
@@ -20,32 +17,24 @@ public class TemperatureService {
     private static final Logger LOGGER = Logger.getLogger(
             TemperatureService.class.getName());
 
-    private WebTarget target;
+    @Inject
+    @ConfigProperty(name = "temperature.apiKey")
+    private String apiKey;
 
-    @PostConstruct
-    public void init() {
-        Client client = ClientBuilder.newBuilder()
-                .connectTimeout(500, TimeUnit.MICROSECONDS)
-                .readTimeout(700, TimeUnit.MICROSECONDS)
-                .build();
+    @Inject
+    @RestClient
+    private TemperatureClient temperatureClient;
 
-        this.target = client.target("http://api.openweathermap.org/data/2.5/weather");
-    }
-
-    public Double getTemperature(String city) {
-
-        try {
-            JsonObject temperatureDTO = target
-                    .queryParam("q", city)
-                    .queryParam("units", "metric")
-                    .queryParam("APPID", "<YOUR_APPID_KEY_HERE>")
-                    .request().get(JsonObject.class);
-
-            JsonPointer temperature = Json.createPointer("/main/temp");
-            return Double.valueOf(temperature.getValue(temperatureDTO).toString());
-        } catch (ProcessingException pe) {
-            LOGGER.severe(pe.getMessage());
-            return 0.0;
-        }
+    public CompletionStage<Double> getTemperature(String city) {
+        return temperatureClient
+                .getTemperature(city, "metric", apiKey)
+                .thenApplyAsync((temperatureJson) -> {
+                    JsonPointer temperature = Json.createPointer("/main/temp");
+                    return Double.valueOf(temperature.getValue(temperatureJson).toString());
+                })
+                .exceptionally(ex -> {
+                    LOGGER.severe(ex.getMessage());
+                    return 0.0;
+                });
     }
 }
