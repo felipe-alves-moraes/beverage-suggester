@@ -26,7 +26,7 @@ public class BeverageService {
             new Beverage("Smoothie", Arrays.asList(Category.COLD, Category.ANYTIME)),
             new Beverage("Tea", Arrays.asList(Category.HOT)));
 
-    private TemperatureService temperatureService;
+    private final TemperatureService temperatureService;
     ThreadLocalRandom random = ThreadLocalRandom.current();
 
     @Inject
@@ -34,10 +34,6 @@ public class BeverageService {
         this.temperatureService = temperatureService;
     }
 
-    protected BeverageService() {
-    }
-    
-    
     public CompletionStage<Beverage> pickRandom() {
         var randomIndex = random.nextInt(BEVERAGES.size());
 
@@ -59,7 +55,7 @@ public class BeverageService {
         });
     }
 
-    private Category getBestCategoryFromTemperature(int temperature) {
+    private Category getBestCategoryFromTemperature(final int temperature) {
         if (temperature <= 20) {
             return Category.HOT;
         } else if (temperature > 20 && temperature < 27) {

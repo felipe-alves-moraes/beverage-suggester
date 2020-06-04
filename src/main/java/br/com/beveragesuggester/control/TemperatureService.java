@@ -17,15 +17,18 @@ public class TemperatureService {
     private static final Logger LOGGER = Logger.getLogger(
             TemperatureService.class.getName());
 
-    @Inject
-    @ConfigProperty(name = "temperature.apiKey")
-    private String apiKey;
+    private final TemperatureClient temperatureClient;
+    private final String apiKey;
 
     @Inject
     @RestClient
-    private TemperatureClient temperatureClient;
-
-    public CompletionStage<Double> getTemperature(String city) {
+    public TemperatureService(TemperatureClient temperatureClient, 
+            @ConfigProperty(name = "temperature.apiKey") String apiKey) {
+        this.temperatureClient = temperatureClient;
+        this.apiKey = apiKey;
+    }
+    
+    public CompletionStage<Double> getTemperature(final String city) {
         return temperatureClient
                 .getTemperature(city, "metric", apiKey)
                 .thenApplyAsync((temperatureJson) -> {
