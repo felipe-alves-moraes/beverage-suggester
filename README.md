@@ -3,16 +3,19 @@ To run this project you will need:
 
 * [Docker](https://www.docker.com/community-edition)
 
-Or if you want to run without Docker, you will need a Application server:
+Or if you want to run locally without docker, you have the following options:
 
-* [Payara Micro](https://www.payara.fish/downloads) - I suggest this one, it's simpler in my opinion
+* [Open Liberty Maven Plugin](https://github.com/OpenLiberty/ci.maven) - With the command `mvn liberty:run` (the plugin is already set in pom.xml), 
+it will start the open-liberty server for you using the `server.xml` file located on `src/main/liberty/config`. 
+If you want also to develop and make use of a hot-deploy features you can use `mvn liberty:dev` and all code changes are automatically deployed for you without restart the server.
 
-# Build and Run
-## Docker
-Simply use the buildAndRun script that it will build and run a docker container for you.
-The application will be available in http://localhost:8080 
-## Application Server
-If you are using Payara Micro as suggested, buid the project using `mvn clean package`, and run it using the following command: `java -jar <dir_payara>/payara-micro.jar --deploy .target/beverage-suggester.war`
+* [Payara Micro](https://www.payara.fish/downloads) - This is the server that the docker is using to deploy, 
+you can download a copy to your local machine and run: `java -jar <dir_payara>/payara-micro.jar --deploy .target/beverage-suggester.war`
+
+# Docker
+Simply run `./buildAndRun.sh` script that it will build and run a docker container for you. You can check that the container is up using `docker ps`, also you can check the logs using `docker logs -f beverages`.
+
+The application will be available on http://localhost:8080 
 
 # Usage
 You can get suggestion of a random beverage using the following URL:
