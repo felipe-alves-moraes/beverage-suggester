@@ -66,10 +66,10 @@ public class TemperatureServiceTest {
         assertEquals(Double.valueOf(0.0), temp);
     }
     
-    private static class TemperatureClientStub implements TemperatureClient {
+    private class TemperatureClientStub implements TemperatureClient {
 
         @Override
-        public CompletionStage<JsonObject> getTemperature(String city, String unitis, String apiKey) {
+        public CompletionStage<JsonObject> getTemperature(String city, String units, String apiKey) {
             return null;
         }
     

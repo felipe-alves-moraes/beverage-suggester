@@ -18,7 +18,7 @@ public interface TemperatureClient {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public CompletionStage<JsonObject> getTemperature(@QueryParam("q") String city,
+    CompletionStage<JsonObject> getTemperature(@QueryParam("q") String city,
         @QueryParam("units") String unitis, @QueryParam("APPID") String apiKey);
     
 }
