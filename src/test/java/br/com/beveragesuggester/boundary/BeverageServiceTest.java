@@ -1,20 +1,22 @@
 package br.com.beveragesuggester.boundary;
 
-import br.com.beveragesuggester.control.TemperatureService;
-import br.com.beveragesuggester.entity.Beverage;
-import br.com.beveragesuggester.entity.Category;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.ejb.embeddable.EJBContainer;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import br.com.beveragesuggester.control.TemperatureService;
+import br.com.beveragesuggester.entity.Category;
 
 /**
  *

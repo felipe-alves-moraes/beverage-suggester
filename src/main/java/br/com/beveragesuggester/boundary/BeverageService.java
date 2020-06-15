@@ -20,11 +20,11 @@ import javax.inject.Inject;
 public class BeverageService {
 
     private static final List<Beverage> BEVERAGES = Arrays.asList(
-            new Beverage("Coffee", Arrays.asList(Category.HOT, Category.ANYTIME)),
-            new Beverage("Beer", Arrays.asList(Category.COLD)),
-            new Beverage("Hot Chocolate", Arrays.asList(Category.HOT)),
-            new Beverage("Smoothie", Arrays.asList(Category.COLD, Category.ANYTIME)),
-            new Beverage("Tea", Arrays.asList(Category.HOT)));
+            new Beverage("Coffee", List.of(Category.HOT, Category.ANYTIME)),
+            new Beverage("Beer", List.of(Category.COLD)),
+            new Beverage("Hot Chocolate", List.of(Category.HOT)),
+            new Beverage("Smoothie", List.of(Category.COLD, Category.ANYTIME)),
+            new Beverage("Tea", List.of(Category.HOT)));
 
     private final TemperatureService temperatureService;
     ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -58,7 +58,7 @@ public class BeverageService {
     private Category getBestCategoryFromTemperature(final int temperature) {
         if (temperature <= 20) {
             return Category.HOT;
-        } else if (temperature > 20 && temperature < 27) {
+        } else if (temperature < 27) {
             return Category.ANYTIME;
         } else {
             return Category.COLD;

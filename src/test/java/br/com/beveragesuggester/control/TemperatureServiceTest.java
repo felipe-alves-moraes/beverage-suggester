@@ -1,17 +1,21 @@
 package br.com.beveragesuggester.control;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+
 import javax.json.Json;
 import javax.json.JsonObject;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -31,7 +35,7 @@ public class TemperatureServiceTest {
     @Test
     public void testGetTemperature() throws InterruptedException, ExecutionException {
         // GIVEN
-        JsonObject jsonObject = Json.createObjectBuilder(Map.of("main", Map.of("temp", Double.valueOf(25)), "test", "abc")).build();
+        JsonObject jsonObject = Json.createObjectBuilder(Map.of("main", Map.of("temp", 25D), "test", "abc")).build();
         when(temperatureClient.getTemperature(anyString(), anyString(), anyString())).thenReturn(CompletableFuture.supplyAsync(() -> jsonObject));
         
         // WHEN
@@ -62,7 +66,7 @@ public class TemperatureServiceTest {
         assertEquals(Double.valueOf(0.0), temp);
     }
     
-    private class TemperatureClientStub implements TemperatureClient {
+    private static class TemperatureClientStub implements TemperatureClient {
 
         @Override
         public CompletionStage<JsonObject> getTemperature(String city, String unitis, String apiKey) {
