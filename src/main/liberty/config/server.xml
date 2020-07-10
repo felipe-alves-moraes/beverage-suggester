@@ -2,4 +2,11 @@
     <featureManager>
         <feature>microProfile-3.3</feature>
     </featureManager>
+
+    <variable name="default.http.port" defaultValue="9080" />
+    <variable name="default.https.port" defaultValue="9443" />
+
+    <quickStartSecurity userName="admin" userPassword="adminpwd"/>
+    <keyStore id="defaultKeyStore" location="key.jks" type="jks" password="mpKeystore" />
+    <httpEndpoint host="*" httpPort="${default.http.port}" httpsPort="${default.https.port}" id="defaultHttpEndpoint" />
 </server>

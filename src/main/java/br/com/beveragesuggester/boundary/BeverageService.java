@@ -1,22 +1,23 @@
 package br.com.beveragesuggester.boundary;
 
-import br.com.beveragesuggester.control.TemperatureService;
-import br.com.beveragesuggester.entity.Beverage;
-import br.com.beveragesuggester.entity.Category;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ThreadLocalRandom;
-import static java.util.stream.Collectors.toList;
-import javax.ejb.Stateless;
+
 import javax.inject.Inject;
+
+import br.com.beveragesuggester.control.TemperatureService;
+import br.com.beveragesuggester.entity.Beverage;
+import br.com.beveragesuggester.entity.Category;
 
 /**
  *
  * @author Felipe
  */
-@Stateless
 public class BeverageService {
 
     private static final List<Beverage> BEVERAGES = Arrays.asList(
@@ -30,31 +31,32 @@ public class BeverageService {
     ThreadLocalRandom random = ThreadLocalRandom.current();
 
     @Inject
-    public BeverageService(TemperatureService temperatureService) {
+    public BeverageService(final TemperatureService temperatureService) {
         this.temperatureService = temperatureService;
     }
 
     public CompletionStage<Beverage> pickRandom() {
-        var randomIndex = random.nextInt(BEVERAGES.size());
+        final var randomIndex = getRandomIndex(BEVERAGES.size());
 
         return CompletableFuture.supplyAsync(() -> BEVERAGES.get(randomIndex));
     }
 
     public CompletionStage<Beverage> pickRandomBasedOnTemperature() {
-
-        CompletionStage<Double> temperatureFuture = temperatureService.getTemperature("Sao Paulo, BR");
-        return temperatureFuture.thenApply(temperature -> {
-            Category bestCategoryFromTemperature = getBestCategoryFromTemperature(temperature.intValue());
-
-            List<Beverage> beveragesTempBased = BEVERAGES.stream()
+        
+        final CompletionStage<Double> temperatureStage = temperatureService.getTemperature("Sao Paulo, BR");
+        return temperatureStage.thenApply(temperature -> {
+            final var bestCategoryFromTemperature = getBestCategoryFromTemperature(temperature.intValue());
+            
+            final var beveragesTempBased = BEVERAGES
+                    .stream()
                     .filter(beverage -> beverage.getCategories().contains(bestCategoryFromTemperature))
                     .collect(toList());
-
-            int randomIndex = random.nextInt(beveragesTempBased.size());
+            
+            final int randomIndex = getRandomIndex(beveragesTempBased.size());
             return beveragesTempBased.get(randomIndex);
         });
     }
-
+    
     private Category getBestCategoryFromTemperature(final int temperature) {
         if (temperature <= 20) {
             return Category.HOT;
@@ -64,4 +66,9 @@ public class BeverageService {
             return Category.COLD;
         }
     }
+    
+    private int getRandomIndex(int bound) {
+        return random.nextInt(bound);
+    }
+    
 }

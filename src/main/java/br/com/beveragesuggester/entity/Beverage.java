@@ -8,10 +8,10 @@ import java.util.List;
  */
 public class Beverage {
 
-    private String name;
-    private List<Category> categories;
+    private final String name;
+    private final List<Category> categories;
 
-    public Beverage(String name, List<Category> categories) {
+    public Beverage(final String name, final List<Category> categories) {
         this.name = name;
         this.categories = categories;
     }

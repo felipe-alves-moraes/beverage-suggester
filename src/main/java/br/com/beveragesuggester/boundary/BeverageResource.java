@@ -3,6 +3,8 @@ package br.com.beveragesuggester.boundary;
 import br.com.beveragesuggester.entity.Beverage;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,16 +19,28 @@ import javax.ws.rs.core.Response;
  *
  * @author Felipe
  */
+@ApplicationScoped
 @Path("beverages")
 public class BeverageResource {
 
+    private final BeverageService beverageService;
+
+    /*
+        Needed because of Jax-rs is not compatible with CDI constructor injection =(
+        https://github.com/eclipse-ee4j/jaxrs-api/issues/633
+    */
+    protected BeverageResource() {
+        this(null);
+    }
+
     @Inject
-    BeverageService beverageService;
+    public BeverageResource(final BeverageService beverageService) {
+        this.beverageService = beverageService;
+    }
 
     @GET
     @Produces(value = MediaType.APPLICATION_JSON)
-    public void suggestBeverage(
-            @QueryParam(value = "useTemperature") boolean useTemperature,
+    public void suggestBeverage(@QueryParam(value = "useTemperature") boolean useTemperature,
             @Suspended AsyncResponse asyncResponse) {
 
         asyncResponse.setTimeout(1, TimeUnit.SECONDS);
@@ -34,8 +48,7 @@ public class BeverageResource {
             ar.resume(Response.status(204).header("info", "late, but o.k").build());
         });
 
-        pickRandomBeverage(useTemperature)
-                .thenAccept(asyncResponse::resume);
+        pickRandomBeverage(useTemperature).thenAccept(asyncResponse::resume);
     }
 
     private CompletionStage<Beverage> pickRandomBeverage(boolean useTemperature) {
@@ -45,4 +58,5 @@ public class BeverageResource {
             return beverageService.pickRandom();
         }
     }
+
 }

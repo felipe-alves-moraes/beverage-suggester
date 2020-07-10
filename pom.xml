@@ -13,7 +13,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         
-        <liberty-plugin.version>3.2.1</liberty-plugin.version>
+        <liberty-plugin.version>3.2.2</liberty-plugin.version>
     </properties>
     
     <dependencies>
