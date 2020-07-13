@@ -23,17 +23,15 @@ public class TemperatureService {
 
     @Inject
     @RestClient
-    public TemperatureService(TemperatureClient temperatureClient,
-                              @ConfigProperty(name = "temperature.apiKey") String apiKey) {
+    public TemperatureService(final TemperatureClient temperatureClient,
+            @ConfigProperty(name = "temperature.apiKey") final String apiKey) {
         this.temperatureClient = temperatureClient;
         this.apiKey = apiKey;
     }
 
     public CompletionStage<Double> getTemperature(final String city) {
-        return temperatureClient
-                .getTemperature(city, "metric", apiKey)
-                .thenApplyAsync((temperatureJson) -> {
-                    JsonPointer temperature = Json.createPointer("/main/temp");
+        return temperatureClient.getTemperature(city, "metric", apiKey).thenApplyAsync((temperatureJson) -> {
+            final JsonPointer temperature = Json.createPointer("/main/temp");
                     return Double.valueOf(temperature.getValue(temperatureJson).toString());
                 })
                 .exceptionally(ex -> {

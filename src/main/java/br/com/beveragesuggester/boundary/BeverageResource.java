@@ -40,8 +40,8 @@ public class BeverageResource {
 
     @GET
     @Produces(value = MediaType.APPLICATION_JSON)
-    public void suggestBeverage(@QueryParam(value = "useTemperature") boolean useTemperature,
-            @Suspended AsyncResponse asyncResponse) {
+    public void suggestBeverage(@QueryParam(value = "useTemperature") final boolean useTemperature,
+            @Suspended final AsyncResponse asyncResponse) {
 
         asyncResponse.setTimeout(1, TimeUnit.SECONDS);
         asyncResponse.setTimeoutHandler((ar) -> {
@@ -51,7 +51,7 @@ public class BeverageResource {
         pickRandomBeverage(useTemperature).thenAccept(asyncResponse::resume);
     }
 
-    private CompletionStage<Beverage> pickRandomBeverage(boolean useTemperature) {
+    private CompletionStage<Beverage> pickRandomBeverage(final boolean useTemperature) {
         if (useTemperature) {
             return beverageService.pickRandomBasedOnTemperature();
         } else {

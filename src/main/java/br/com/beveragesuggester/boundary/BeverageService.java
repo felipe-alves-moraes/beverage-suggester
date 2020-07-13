@@ -67,7 +67,7 @@ public class BeverageService {
         }
     }
     
-    private int getRandomIndex(int bound) {
+    private int getRandomIndex(final int bound) {
         return random.nextInt(bound);
     }
     
