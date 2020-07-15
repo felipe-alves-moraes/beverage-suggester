@@ -26,9 +26,9 @@ public class BeverageResource {
     private final BeverageService beverageService;
 
     /*
-        Needed because of Jax-rs is not compatible with CDI constructor injection =(
-        https://github.com/eclipse-ee4j/jaxrs-api/issues/633
-    */
+     * Needed because of Jax-rs is not compatible with CDI constructor injection =(
+     * https://github.com/eclipse-ee4j/jaxrs-api/issues/633
+     */
     protected BeverageResource() {
         this(null);
     }
@@ -58,5 +58,4 @@ public class BeverageResource {
             return beverageService.pickRandom();
         }
     }
-
 }
