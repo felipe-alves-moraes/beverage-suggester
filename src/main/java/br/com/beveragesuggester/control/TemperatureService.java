@@ -35,7 +35,7 @@ public class TemperatureService {
                     return Double.valueOf(temperature.getValue(temperatureJson).toString());
                 })
                 .exceptionally(ex -> {
-                    LOG.log(ERROR, ex.getMessage());
+                    LOG.log(DEBUG, ex.getMessage());
                     return 0.0;
                 });
     }

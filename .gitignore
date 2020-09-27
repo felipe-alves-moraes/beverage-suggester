@@ -31,3 +31,5 @@ build/
 /nb-configuration.xml
 /nbactions.xml
 /nbproject/project.properties
+
+.DS_Store

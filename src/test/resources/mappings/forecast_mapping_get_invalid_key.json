@@ -1,0 +1,11 @@
+{
+  "name" : "forecast_mapping_invalid_key",
+  "request" : {
+    "url" : "/data/2.5/weather?q=Sao%20Paulo%2Cbr&units=metric",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 401,
+    "jsonBody" : {"cod":401, "message": "Invalid API key. Please see http://openweathermap.org/faq#error401 for more info."}
+  }
+}

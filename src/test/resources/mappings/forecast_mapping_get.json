@@ -1,0 +1,11 @@
+{
+  "name" : "forecast_mapping",
+  "request" : {
+    "urlPattern" : "/data/2.5/weather\\?q=Sao%20Paulo%2Cbr&units=metric&(appid=[0-9a-zA-Z]+)",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "forecast_response.json"
+  }
+}
