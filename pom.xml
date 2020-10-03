@@ -5,17 +5,17 @@
     <artifactId>beverage-suggester</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    
+
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        
+
         <liberty-plugin.version>3.2.2</liberty-plugin.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -30,12 +30,18 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-        
-        <dependency>
+
+        <!-- <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.6.2</version>
             <scope>test</scope>
+        </dependency> -->
+
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.6.2</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -43,7 +49,7 @@
             <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>jakarta.json</artifactId>
@@ -51,13 +57,13 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-rs-mp-client</artifactId>
-            <version>3.3.6</version>
-            <scope>test</scope>
-        </dependency>
-        
+<!--        <dependency>-->
+<!--            <groupId>org.apache.cxf</groupId>-->
+<!--            <artifactId>cxf-rt-rs-mp-client</artifactId>-->
+<!--            <version>3.3.6</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>
@@ -71,22 +77,108 @@
             <version>4.1.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
-    
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.6.0.Final</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <finalName>beverage-suggester</finalName>
-        
+
         <plugins>
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${liberty-plugin.version}</version>
             </plugin>
-            
+
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-rt-rs-mp-client</artifactId>
+                    <version>3.3.6</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>arquillian</id>
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-embedded</artifactId>
+                    <version>2.3.1</version>
+                    <scope>test</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>fish.payara.extras</groupId>
+                    <artifactId>payara-embedded-all</artifactId>
+                    <version>5.2020.4</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                                <arquillian.launch>payara-embedded</arquillian.launch>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>arquillian-liberty</id>
+
+            <properties>
+                <!-- Liberty configuration -->
+                <liberty.var.default.http.port>9080</liberty.var.default.http.port>
+                <liberty.var.default.https.port>9443</liberty.var.default.https.port>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>io.openliberty.arquillian</groupId>
+                    <artifactId>arquillian-liberty-managed-junit</artifactId>
+                    <version>1.1.6</version>
+                    <type>pom</type>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>

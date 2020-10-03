@@ -6,6 +6,7 @@ import javax.json.Json;
 import javax.json.JsonPointer;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import static java.lang.System.Logger.Level.*;
@@ -24,14 +25,15 @@ public class TemperatureService {
     @Inject
     @RestClient
     public TemperatureService(final TemperatureClient temperatureClient,
-            @ConfigProperty(name = "temperature.apiKey") final String apiKey) {
+                              @ConfigProperty(name = "temperature.apiKey") final String apiKey) {
         this.temperatureClient = temperatureClient;
         this.apiKey = apiKey;
     }
 
     public CompletionStage<Double> getTemperature(final String city) {
-        return temperatureClient.getTemperature(city, "metric", apiKey).thenApplyAsync((temperatureJson) -> {
-            final JsonPointer temperature = Json.createPointer("/main/temp");
+        return temperatureClient.getTemperature(city, "metric", apiKey)
+                .thenApplyAsync((temperatureJson) -> {
+                    final JsonPointer temperature = Json.createPointer("/main/temp");
                     return Double.valueOf(temperature.getValue(temperatureJson).toString());
                 })
                 .exceptionally(ex -> {

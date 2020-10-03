@@ -44,9 +44,7 @@ public class BeverageResource {
             @Suspended final AsyncResponse asyncResponse) {
 
         asyncResponse.setTimeout(1, TimeUnit.SECONDS);
-        asyncResponse.setTimeoutHandler((ar) -> {
-            ar.resume(Response.status(204).header("info", "late, but o.k").build());
-        });
+        asyncResponse.setTimeoutHandler((ar) -> ar.resume(Response.status(200).header("info", "late, but o.k").build()));
 
         pickRandomBeverage(useTemperature).thenAccept(asyncResponse::resume);
     }

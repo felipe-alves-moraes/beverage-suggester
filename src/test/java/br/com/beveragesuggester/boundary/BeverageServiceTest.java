@@ -1,7 +1,7 @@
 package br.com.beveragesuggester.boundary;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -11,8 +11,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import br.com.beveragesuggester.control.TemperatureService;
@@ -26,8 +26,8 @@ public class BeverageServiceTest {
 
     private BeverageService beverageService;
     private TemperatureService temperatureService;
-    
-    @BeforeEach
+
+    @Before
     public void setUp() {
         temperatureService = mock(TemperatureService.class);
         

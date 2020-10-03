@@ -1,8 +1,16 @@
 {
   "name" : "forecast_mapping_invalid_key",
   "request" : {
-    "url" : "/data/2.5/weather?q=Sao%20Paulo%2Cbr&units=metric",
-    "method" : "GET"
+    "urlPath" : "/data/2.5/weather",
+    "method" : "GET",
+    "queryParameters": {
+      "q": {
+        "matches": "^[a-zA-Z\\s,]+$"
+      },
+      "units": {
+        "equalTo": "metric"
+      }
+    }
   },
   "response" : {
     "status" : 401,
