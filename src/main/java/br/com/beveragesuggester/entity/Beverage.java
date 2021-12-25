@@ -1,27 +1,8 @@
 package br.com.beveragesuggester.entity;
 
-import java.util.List;
+import java.util.Set;
 
 /**
- *
  * @author Felipe
  */
-public class Beverage {
-
-    private String name;
-    private List<Category> categories;
-
-    public Beverage(String name, List<Category> categories) {
-        this.name = name;
-        this.categories = categories;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-}
+public record Beverage(String name, Set<Category> categories) { }
