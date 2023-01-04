@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: beverage-suggester
+  description: Pet project for blog post
+spec:
+  type: service
+  owner: user:fmoraes
+  lifecycle: experimental
